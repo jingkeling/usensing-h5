@@ -1,0 +1,44 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # 当 main 分支有推送时触发
+  workflow_dispatch:  # 允许手动触发
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      # page_url 是从 GitHub API 硬编码获取的，可能包含旧的域名配置
+      # 如果 Custom domain 是空的但还显示旧域名，可能原因：
+      # 1. 仓库中有 CNAME 文件（在 GitHub 上，不在本地）
+      # 2. GitHub API 缓存了旧配置
+      # 解决方案：直接硬编码正确的 URL
+      url: https://jingkeling.github.io/christmas-tree/
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'  # 上传当前目录的所有文件
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+

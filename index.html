@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>联感 uSensing | 智能检测戒指健康平台</title>
+  <meta name="description" content="联感 uSensing：基于智能检测戒指的健康管理App，提供连续生命体征监测、AI健康建议、个性化趋势分析与安心预警。" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: "#0d1117",
+            mist: "#f4f6fb",
+            ocean: "#0f5b7a",
+            mint: "#70f0c1",
+            glow: "#ffcf6f",
+            blush: "#ffd9e8",
+          },
+          fontFamily: {
+            display: ["Space Grotesk", "Noto Sans SC", "sans-serif"],
+            body: ["Noto Sans SC", "Space Grotesk", "sans-serif"],
+          },
+          boxShadow: {
+            soft: "0 18px 40px -25px rgba(16, 24, 40, 0.45)",
+            glow: "0 18px 60px -25px rgba(112, 240, 193, 0.65)",
+          },
+          keyframes: {
+            float: {
+              "0%, 100%": { transform: "translateY(0px)" },
+              "50%": { transform: "translateY(-10px)" },
+            },
+            rise: {
+              "0%": { opacity: 0, transform: "translateY(20px)" },
+              "100%": { opacity: 1, transform: "translateY(0px)" },
+            },
+            pulseGlow: {
+              "0%, 100%": { boxShadow: "0 0 0 0 rgba(112, 240, 193, 0.35)" },
+              "50%": { boxShadow: "0 0 0 18px rgba(112, 240, 193, 0)" },
+            },
+          },
+          animation: {
+            float: "float 6s ease-in-out infinite",
+            rise: "rise 0.8s ease-out both",
+            pulseGlow: "pulseGlow 2.8s ease-out infinite",
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+
+    body {
+      background: radial-gradient(circle at top, #f8fbff 0%, #eef2ff 40%, #f6f7fb 100%);
+    }
+
+    .hero-glow {
+      background: radial-gradient(circle at 20% 20%, rgba(112, 240, 193, 0.5), transparent 55%),
+        radial-gradient(circle at 80% 10%, rgba(255, 207, 111, 0.35), transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 217, 232, 0.35), transparent 50%);
+    }
+
+    .glass {
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .ring-orbit {
+      background: radial-gradient(circle, rgba(112, 240, 193, 0.2), transparent 60%);
+    }
+  </style>
+</head>
+
+<body class="font-body text-ink">
+  <div id="app" class="min-h-screen">
+    <header class="relative overflow-hidden">
+      <div class="absolute inset-0 hero-glow"></div>
+      <nav class="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 pb-6 pt-8">
+        <div class="flex items-center gap-3">
+          <div class="h-11 w-11 rounded-2xl bg-ink text-white grid place-items-center font-display text-lg">uS</div>
+          <div>
+            <p class="font-display text-lg font-semibold">联感 uSensing</p>
+            <p class="text-xs text-gray-500">Smart Ring Health OS</p>
+          </div>
+        </div>
+        <div class="hidden items-center gap-8 text-sm text-gray-600 md:flex">
+          <a href="#features" class="hover:text-ink">核心能力</a>
+          <a href="#insights" class="hover:text-ink">健康洞察</a>
+          <a href="#ai" class="hover:text-ink">AI健康顾问</a>
+          <a href="#pricing" class="hover:text-ink">服务方案</a>
+        </div>
+        <div class="flex items-center gap-3">
+          <button
+            class="hidden rounded-full border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:border-ink hover:text-ink md:inline-flex">预约演示</button>
+          <button class="rounded-full bg-ink px-5 py-2 text-sm font-medium text-white shadow-soft">下载 App</button>
+        </div>
+      </nav>
+
+      <section
+        class="relative z-10 mx-auto grid max-w-6xl gap-10 px-6 pb-24 pt-6 md:grid-cols-[1.1fr_0.9fr] md:items-center">
+        <div class="space-y-6">
+          <span
+            class="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-1 text-xs font-medium text-ocean shadow-soft">
+            智能检测戒指 · 连续健康监测
+          </span>
+          <h1 class="font-display text-4xl font-semibold leading-tight md:text-5xl">
+            把生命体征变成可视化故事，
+            用环形科技守护每一次心跳
+          </h1>
+          <p class="text-base text-gray-600 md:text-lg">
+            联感 uSensing 结合智能检测戒指与 AI 健康引擎，持续追踪血压趋势、血氧波动、睡眠恢复与运动负荷，
+            让你用最轻盈的方式掌控身体状态。
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <button class="rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white shadow-glow">
+              立即体验
+            </button>
+            <button
+              class="rounded-full border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-700 hover:border-ink hover:text-ink">
+              获取设备方案
+            </button>
+          </div>
+          <div class="grid grid-cols-3 gap-4 text-sm">
+            <div class="glass rounded-2xl px-4 py-3 text-center shadow-soft">
+              <p class="font-display text-xl font-semibold">24h</p>
+              <p class="text-gray-500">连续监测</p>
+            </div>
+            <div class="glass rounded-2xl px-4 py-3 text-center shadow-soft">
+              <p class="font-display text-xl font-semibold">7+</p>
+              <p class="text-gray-500">关键指标</p>
+            </div>
+            <div class="glass rounded-2xl px-4 py-3 text-center shadow-soft">
+              <p class="font-display text-xl font-semibold">AI</p>
+              <p class="text-gray-500">主动提醒</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative">
+          <div class="absolute -top-10 left-6 h-40 w-40 rounded-full ring-orbit"></div>
+          <div class="absolute -bottom-12 right-2 h-36 w-36 rounded-full ring-orbit"></div>
+          <div class="relative mx-auto max-w-sm rounded-[32px] bg-white/90 p-6 shadow-soft">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-semibold text-gray-700">欢迎回来，元祎</p>
+              <span class="rounded-full bg-mint/40 px-3 py-1 text-xs font-medium text-ocean">实时</span>
+            </div>
+            <div class="mt-6 rounded-3xl bg-gradient-to-br from-mint/40 via-white to-blush/60 p-5 shadow-soft">
+              <p class="text-lg font-semibold">今日健康得分</p>
+              <p class="mt-1 text-4xl font-semibold text-ocean">86</p>
+              <div class="mt-4 grid grid-cols-2 gap-3 text-xs text-gray-600">
+                <div class="rounded-2xl bg-white/80 px-3 py-2">血压趋势稳定</div>
+                <div class="rounded-2xl bg-white/80 px-3 py-2">睡眠恢复优</div>
+                <div class="rounded-2xl bg-white/80 px-3 py-2">血氧波动低</div>
+                <div class="rounded-2xl bg-white/80 px-3 py-2">压力指数轻</div>
+              </div>
+            </div>
+            <div class="mt-6 grid grid-cols-3 gap-3">
+              <div class="rounded-2xl bg-mist px-3 py-4 text-center">
+                <p class="text-xs text-gray-500">血压</p>
+                <p class="text-lg font-semibold">118/75</p>
+              </div>
+              <div class="rounded-2xl bg-mist px-3 py-4 text-center">
+                <p class="text-xs text-gray-500">血氧</p>
+                <p class="text-lg font-semibold">98%</p>
+              </div>
+              <div class="rounded-2xl bg-mist px-3 py-4 text-center">
+                <p class="text-xs text-gray-500">睡眠</p>
+                <p class="text-lg font-semibold">7.4h</p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="absolute -right-10 top-8 hidden w-40 rounded-3xl bg-white/90 p-4 shadow-soft md:block animate-float">
+            <p class="text-xs text-gray-500">今日环形设备状态</p>
+            <p class="mt-1 text-sm font-semibold">电量 82% · 连接稳定</p>
+            <div class="mt-3 h-2 w-full overflow-hidden rounded-full bg-gray-200">
+              <div class="h-full w-4/5 rounded-full bg-mint"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <section class="mx-auto max-w-6xl px-6 pb-16">
+      <div class="grid gap-6 md:grid-cols-3">
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <p class="text-xs uppercase tracking-[0.3em] text-gray-400">算法</p>
+          <p class="mt-2 text-lg font-semibold">多模态传感融合</p>
+          <p class="mt-3 text-sm text-gray-600">结合 PPG、ECG 与温度序列，提升居家监测准确性。</p>
+        </div>
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <p class="text-xs uppercase tracking-[0.3em] text-gray-400">安全</p>
+          <p class="mt-2 text-lg font-semibold">医疗级隐私保护</p>
+          <p class="mt-3 text-sm text-gray-600">多重加密与本地计算策略，数据只为你而用。</p>
+        </div>
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <p class="text-xs uppercase tracking-[0.3em] text-gray-400">体验</p>
+          <p class="mt-2 text-lg font-semibold">轻量佩戴 24/7</p>
+          <p class="mt-3 text-sm text-gray-600">极简戒指设计，全天无感佩戴不打扰生活。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="mx-auto max-w-6xl px-6 pb-24">
+      <div class="flex items-end justify-between gap-6">
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] text-gray-400">核心能力</p>
+          <h2 class="mt-3 font-display text-3xl font-semibold">七大指标 + 五维趋势，把健康看得见</h2>
+        </div>
+        <button
+          class="hidden rounded-full border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:border-ink hover:text-ink md:inline-flex">
+          获取能力矩阵
+        </button>
+      </div>
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        <div v-for="(feature, index) in features" :key="feature.title"
+          class="group rounded-3xl bg-white p-6 shadow-soft transition hover:-translate-y-1"
+          :class="index % 2 === 0 ? 'animate-rise' : ''">
+          <div class="flex items-center justify-between">
+            <span class="rounded-2xl bg-mist px-3 py-1 text-xs font-semibold text-ocean">{{ feature.tag }}</span>
+            <span class="text-2xl">{{ feature.icon }}</span>
+          </div>
+          <h3 class="mt-4 text-lg font-semibold">{{ feature.title }}</h3>
+          <p class="mt-3 text-sm text-gray-600">{{ feature.desc }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="insights" class="relative overflow-hidden bg-ink py-20 text-white">
+      <div class="absolute inset-0 opacity-20"
+        style="background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 32px 32px;">
+      </div>
+      <div class="relative mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-[1fr_1fr] md:items-center">
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] text-mint/70">健康洞察</p>
+          <h2 class="mt-4 font-display text-3xl font-semibold">从数据到故事，AI 生成每日健康简报</h2>
+          <p class="mt-4 text-sm text-gray-200">
+            结合连续监测、行为记录与个人档案，自动生成可读性强的健康报告，
+            帮你识别风险、优化作息、预测波动。
+          </p>
+          <div class="mt-6 grid gap-4 text-sm text-gray-200">
+            <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+              <p class="font-semibold">趋势预警</p>
+              <p class="text-xs text-gray-300">异常波动提前 30 分钟提醒。</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+              <p class="font-semibold">个性化处方</p>
+              <p class="text-xs text-gray-300">基于睡眠与运动推荐恢复策略。</p>
+            </div>
+          </div>
+        </div>
+        <div class="relative">
+          <div class="rounded-[36px] bg-white/5 p-6 shadow-soft backdrop-blur">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-semibold">今日简报</p>
+              <span class="rounded-full bg-mint/20 px-3 py-1 text-xs">09:30 更新</span>
+            </div>
+            <div class="mt-6 space-y-4">
+              <div class="rounded-2xl bg-white/10 p-4">
+                <p class="text-xs text-gray-300">血压趋势</p>
+                <p class="mt-2 text-lg font-semibold">轻微上行，建议午后拉伸 10 分钟</p>
+              </div>
+              <div class="rounded-2xl bg-white/10 p-4">
+                <p class="text-xs text-gray-300">睡眠恢复</p>
+                <p class="mt-2 text-lg font-semibold">深睡提升 12%，保持睡前 1 小时远离屏幕</p>
+              </div>
+              <div class="rounded-2xl bg-white/10 p-4">
+                <p class="text-xs text-gray-300">压力指数</p>
+                <p class="mt-2 text-lg font-semibold">轻度压力，建议冥想 8 分钟</p>
+              </div>
+            </div>
+          </div>
+          <div class="absolute -bottom-8 -right-6 hidden h-32 w-32 rounded-full bg-mint/30 md:block animate-pulseGlow">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ai" class="mx-auto max-w-6xl px-6 py-24">
+      <div class="grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-center">
+        <div class="relative">
+          <div class="absolute -left-6 top-6 h-32 w-32 rounded-full bg-blush/60"></div>
+          <div class="relative rounded-[36px] bg-white p-8 shadow-soft">
+            <div class="flex items-center gap-4">
+              <div class="h-12 w-12 rounded-full bg-ink text-white grid place-items-center">AI</div>
+              <div>
+                <p class="text-sm font-semibold">文元医生 · Dr. PAI</p>
+                <p class="text-xs text-gray-500">智能健康顾问</p>
+              </div>
+            </div>
+            <div class="mt-6 space-y-4 text-sm text-gray-600">
+              <p class="rounded-2xl bg-mist px-4 py-3">今天的血压波动在可控范围内，建议中午增加 15 分钟步行。</p>
+              <p class="rounded-2xl bg-mist px-4 py-3">睡眠恢复提升明显，可继续保持 23:00 前入睡。</p>
+              <p class="rounded-2xl bg-mist px-4 py-3">检测到轻度压力，推荐 5 分钟呼吸训练。</p>
+            </div>
+            <div class="mt-6 flex items-center justify-between text-xs text-gray-500">
+              <span>支持主动问答 · 预警解释</span>
+              <span class="rounded-full bg-mint/40 px-3 py-1 text-ocean">已连接戒指</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] text-gray-400">AI 健康顾问</p>
+          <h2 class="mt-4 font-display text-3xl font-semibold">把复杂的医疗语言翻译成你听得懂的关怀</h2>
+          <p class="mt-4 text-sm text-gray-600">
+            Dr. PAI 每日自动解读数据，并根据你的生活节奏给出可执行的健康行动。随时对话，了解指标含义，
+            也能把报告分享给医生或家人。
+          </p>
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            <div class="rounded-2xl border border-gray-100 bg-white px-5 py-4 shadow-soft">
+              <p class="text-sm font-semibold">风险解释</p>
+              <p class="mt-2 text-xs text-gray-500">解释异常原因并给出应对方案。</p>
+            </div>
+            <div class="rounded-2xl border border-gray-100 bg-white px-5 py-4 shadow-soft">
+              <p class="text-sm font-semibold">医生协作</p>
+              <p class="mt-2 text-xs text-gray-500">一键生成就诊资料与趋势摘要。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="mx-auto max-w-6xl px-6 pb-24">
+      <div class="flex items-center justify-between gap-6">
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] text-gray-400">服务方案</p>
+          <h2 class="mt-3 font-display text-3xl font-semibold">适配不同人群的健康订阅</h2>
+        </div>
+        <span class="rounded-full bg-white px-4 py-2 text-xs text-gray-500 shadow-soft">硬件 + 服务一体化</span>
+      </div>
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        <div v-for="plan in plans" :key="plan.name" class="rounded-3xl border border-gray-100 bg-white p-6 shadow-soft"
+          :class="plan.highlight ? 'ring-2 ring-mint/60' : ''">
+          <div class="flex items-center justify-between">
+            <p class="text-lg font-semibold">{{ plan.name }}</p>
+            <span v-if="plan.highlight" class="rounded-full bg-mint/40 px-3 py-1 text-xs text-ocean">热门</span>
+          </div>
+          <p class="mt-4 text-3xl font-semibold">{{ plan.price }}</p>
+          <p class="mt-2 text-xs text-gray-500">{{ plan.note }}</p>
+          <ul class="mt-4 space-y-2 text-sm text-gray-600">
+            <li v-for="item in plan.items" :key="item">{{ item }}</li>
+          </ul>
+          <button class="mt-6 w-full rounded-full bg-ink px-5 py-2 text-sm font-semibold text-white">选择方案</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-mist py-20">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="grid gap-10 md:grid-cols-[1.1fr_0.9fr] md:items-center">
+          <div>
+            <p class="text-xs uppercase tracking-[0.3em] text-gray-400">设备与算法</p>
+            <h2 class="mt-3 font-display text-3xl font-semibold">硬件 + 云端协同，打造稳定的健康闭环</h2>
+            <p class="mt-4 text-sm text-gray-600">
+              uSensing 智能戒指搭载低功耗传感阵列，配合云端 AI 引擎持续学习个体基线，
+              带来更可靠的健康洞察。
+            </p>
+            <div class="mt-6 grid gap-4 md:grid-cols-2">
+              <div class="rounded-2xl bg-white px-4 py-4 shadow-soft">
+                <p class="text-sm font-semibold">续航 7 天</p>
+                <p class="mt-2 text-xs text-gray-500">快充 35 分钟恢复 80% 电量。</p>
+              </div>
+              <div class="rounded-2xl bg-white px-4 py-4 shadow-soft">
+                <p class="text-sm font-semibold">耐汗防水</p>
+                <p class="mt-2 text-xs text-gray-500">日常佩戴与运动无负担。</p>
+              </div>
+            </div>
+          </div>
+          <div class="relative">
+            <div
+              class="mx-auto h-80 w-80 rounded-full bg-gradient-to-br from-ink via-ocean to-mint/40 p-10 shadow-soft">
+              <div class="h-full w-full rounded-full bg-white/10 backdrop-blur">
+                <div class="flex h-full items-center justify-center">
+                  <div class="h-32 w-32 rounded-full bg-white/90 shadow-soft animate-float"></div>
+                </div>
+              </div>
+            </div>
+            <p class="mt-6 text-center text-xs text-gray-500">轻量化钛合金 · 双色可选</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-6xl px-6 py-24">
+      <div class="grid gap-6 md:grid-cols-3">
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <p class="text-sm font-semibold">企业健康管理</p>
+          <p class="mt-3 text-xs text-gray-500">为团队提供健康画像与风险管理后台。</p>
+        </div>
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <p class="text-sm font-semibold">家庭守护计划</p>
+          <p class="mt-3 text-xs text-gray-500">远程查看父母健康状态与异常提醒。</p>
+        </div>
+        <div class="rounded-3xl bg-white p-6 shadow-soft">
+          <p class="text-sm font-semibold">临床合作</p>
+          <p class="mt-3 text-xs text-gray-500">支持与医院系统对接，形成数据闭环。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="relative overflow-hidden bg-ink py-20 text-white">
+      <div class="absolute inset-0 hero-glow opacity-30"></div>
+      <div
+        class="relative mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 px-6 md:flex-row md:items-center">
+        <div>
+          <h2 class="font-display text-3xl font-semibold">准备好开启你的健康环形时代了吗？</h2>
+          <p class="mt-3 text-sm text-gray-300">即刻体验 uSensing，建立属于你的健康数字分身。</p>
+        </div>
+        <div class="flex flex-wrap gap-4">
+          <button class="rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink">预约试戴</button>
+          <button class="rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white">联系商务</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-ink pb-10 pt-12 text-gray-400">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p class="font-display text-lg font-semibold text-white">联感 uSensing</p>
+            <p class="mt-2 text-xs">智能检测戒指 · 健康数据平台</p>
+          </div>
+          <div class="flex flex-wrap gap-6 text-xs">
+            <a href="#features" class="hover:text-white">产品能力</a>
+            <a href="#ai" class="hover:text-white">AI 顾问</a>
+            <a href="#pricing" class="hover:text-white">服务方案</a>
+            <a href="mailto:hello@usensing.com" class="hover:text-white">hello@usensing.com</a>
+          </div>
+        </div>
+        <div class="mt-8 text-xs">© 2026 uSensing. All rights reserved.</div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          features: [
+            {
+              tag: "心血管",
+              icon: "❤",
+              title: "血压与心电趋势",
+              desc: "连续捕捉血压波动与心率变异，识别风险段。",
+            },
+            {
+              tag: "呼吸",
+              icon: "💧",
+              title: "血氧与呼吸质量",
+              desc: "监测血氧饱和度与呼吸节律，守护夜间安全。",
+            },
+            {
+              tag: "睡眠",
+              icon: "🌙",
+              title: "睡眠结构与恢复",
+              desc: "细分深浅睡比例，评估恢复力与昼夜节律。",
+            },
+            {
+              tag: "运动",
+              icon: "🏃",
+              title: "运动负荷与心率区间",
+              desc: "记录训练强度并给出优化建议。",
+            },
+            {
+              tag: "压力",
+              icon: "🫧",
+              title: "压力指数与情绪波动",
+              desc: "通过 HRV 与温度变化衡量压力水平。",
+            },
+            {
+              tag: "体征",
+              icon: "🧬",
+              title: "体温与代谢趋势",
+              desc: "识别微小体温变化，发现潜在健康信号。",
+            },
+          ],
+          plans: [
+            {
+              name: "基础守护",
+              price: "¥199/月",
+              note: "适合健康关注人群",
+              items: ["核心指标监测", "每日健康简报", "设备云同步"],
+              highlight: false,
+            },
+            {
+              name: "家庭守护",
+              price: "¥299/月",
+              note: "适合家庭与长辈",
+              items: ["家庭共享面板", "风险预警通知", "周报与月报"],
+              highlight: true,
+            },
+            {
+              name: "专业版",
+              price: "¥499/月",
+              note: "适合慢病管理",
+              items: ["医生协作通道", "定制化干预方案", "长期趋势预测"],
+              highlight: false,
+            },
+          ],
+        };
+      },
+    }).mount("#app");
+  </script>
+</body>
+
+</html>
