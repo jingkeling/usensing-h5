@@ -340,8 +340,7 @@
             <p class="text-lg font-semibold">{{ plan.name }}</p>
             <span v-if="plan.highlight" class="rounded-full bg-mint/40 px-3 py-1 text-xs text-ocean">热门</span>
           </div>
-          <p class="mt-4 text-3xl font-semibold">{{ plan.price }}</p>
-          <p class="mt-2 text-xs text-gray-500">{{ plan.note }}</p>
+          <p class="mt-4 text-xs text-gray-500">{{ plan.note }}</p>
           <ul class="mt-4 space-y-2 text-sm text-gray-600">
             <li v-for="item in plan.items" :key="item">{{ item }}</li>
           </ul>
@@ -484,23 +483,20 @@
           plans: [
             {
               name: "基础守护",
-              price: "¥199/月",
               note: "适合健康关注人群",
               items: ["核心指标监测", "每日健康简报", "设备云同步"],
               highlight: false,
             },
             {
               name: "家庭守护",
-              price: "¥299/月",
               note: "适合家庭与长辈",
               items: ["家庭共享面板", "风险预警通知", "周报与月报"],
               highlight: true,
             },
             {
-              name: "专业版",
-              price: "¥499/月",
-              note: "适合慢病管理",
-              items: ["医生协作通道", "定制化干预方案", "长期趋势预测"],
+              name: "专家版",
+              note: "医生教授联合守护",
+              items: ["专属医生 1v1 健康指导", "教授级专家远程会诊", "个性化慢病干预方案", "长期趋势预测与风险评估"],
               highlight: false,
             },
           ],
