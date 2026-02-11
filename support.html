@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>帮助与支持 | 联感 uSensing</title>
+  <meta name="description" content="联感 uSensing 帮助与支持中心，提供常见问题解答、设备故障排查、联系客服等服务。" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: "#0d1117",
+            mist: "#f4f6fb",
+            ocean: "#0f5b7a",
+            mint: "#70f0c1",
+            glow: "#ffcf6f",
+            blush: "#ffd9e8",
+          },
+          fontFamily: {
+            display: ["Space Grotesk", "Noto Sans SC", "sans-serif"],
+            body: ["Noto Sans SC", "Space Grotesk", "sans-serif"],
+          },
+          boxShadow: {
+            soft: "0 18px 40px -25px rgba(16, 24, 40, 0.45)",
+          },
+          keyframes: {
+            rise: {
+              "0%": { opacity: 0, transform: "translateY(20px)" },
+              "100%": { opacity: 1, transform: "translateY(0px)" },
+            },
+          },
+          animation: {
+            rise: "rise 0.8s ease-out both",
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+
+    body {
+      background: radial-gradient(circle at top, #f8fbff 0%, #eef2ff 40%, #f6f7fb 100%);
+    }
+
+    .hero-glow {
+      background: radial-gradient(circle at 20% 20%, rgba(112, 240, 193, 0.35), transparent 55%),
+        radial-gradient(circle at 80% 10%, rgba(255, 207, 111, 0.25), transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 217, 232, 0.25), transparent 50%);
+    }
+
+    .glass {
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+  </style>
+</head>
+
+<body class="font-body text-ink">
+  <div id="app" class="min-h-screen">
+
+    <!-- 导航栏 -->
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 pb-6 pt-8">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="h-11 w-11 rounded-2xl bg-ink text-white grid place-items-center font-display text-lg">uS</div>
+        <div>
+          <p class="font-display text-lg font-semibold">联感 uSensing</p>
+          <p class="text-xs text-gray-500">Smart Ring Health OS</p>
+        </div>
+      </a>
+      <div class="hidden items-center gap-8 text-sm text-gray-600 md:flex">
+        <a href="index.html" class="hover:text-ink">返回官网</a>
+        <a href="#faq" class="hover:text-ink">常见问题</a>
+        <a href="#troubleshoot" class="hover:text-ink">故障排查</a>
+        <a href="#contact" class="hover:text-ink">联系我们</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <button
+          class="rounded-full bg-ink px-5 py-2 text-sm font-medium text-white shadow-soft">下载 App</button>
+      </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <header class="relative overflow-hidden">
+      <div class="absolute inset-0 hero-glow"></div>
+      <div class="relative z-10 mx-auto max-w-6xl px-6 pb-16 pt-10 text-center">
+        <span
+          class="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-1 text-xs font-medium text-ocean shadow-soft">
+          帮助与支持中心
+        </span>
+        <h1 class="mt-6 font-display text-4xl font-semibold leading-tight md:text-5xl">
+          我们在这里为你解决问题
+        </h1>
+        <p class="mx-auto mt-4 max-w-2xl text-base text-gray-600 md:text-lg">
+          浏览常见问题、设备故障排查指南，或直接与我们的支持团队取得联系。
+        </p>
+
+        <!-- 搜索框 -->
+        <div class="mx-auto mt-8 max-w-xl">
+          <div class="glass flex items-center gap-3 rounded-2xl px-5 py-4 shadow-soft">
+            <svg class="h-5 w-5 shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input v-model="searchQuery" type="text" placeholder="搜索常见问题，例如：如何连接戒指"
+              class="w-full bg-transparent text-sm outline-none placeholder:text-gray-400" />
+          </div>
+        </div>
+
+        <!-- 快捷分类 -->
+        <div class="mx-auto mt-6 flex max-w-xl flex-wrap justify-center gap-3">
+          <button v-for="cat in categories" :key="cat.key" @click="activeCategory = cat.key"
+            class="rounded-full px-4 py-2 text-xs font-medium transition"
+            :class="activeCategory === cat.key
+              ? 'bg-ink text-white shadow-soft'
+              : 'bg-white text-gray-600 hover:bg-gray-50 shadow-soft'">
+            {{ cat.icon }} {{ cat.label }}
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 常见问题 FAQ -->
+    <section id="faq" class="mx-auto max-w-4xl px-6 pb-20">
+      <div class="text-center">
+        <p class="text-xs uppercase tracking-[0.3em] text-gray-400">常见问题</p>
+        <h2 class="mt-3 font-display text-3xl font-semibold">最常被问到的问题</h2>
+      </div>
+
+      <div v-if="filteredFaqs.length === 0" class="mt-10 text-center">
+        <p class="text-gray-500">未找到匹配的问题，请尝试其他关键词或 <a href="#contact" class="text-ocean underline">联系我们</a>。</p>
+      </div>
+
+      <div class="mt-10 space-y-4">
+        <div v-for="(faq, index) in filteredFaqs" :key="index"
+          class="rounded-3xl bg-white shadow-soft overflow-hidden transition hover:shadow-lg">
+          <button @click="toggleFaq(index)"
+            class="flex w-full items-center justify-between px-6 py-5 text-left">
+            <div class="flex items-center gap-3">
+              <span class="rounded-xl bg-mist px-2.5 py-1 text-xs font-semibold text-ocean">{{ faq.cat }}</span>
+              <span class="text-sm font-semibold">{{ faq.q }}</span>
+            </div>
+            <svg class="h-5 w-5 shrink-0 text-gray-400 transition-transform duration-300"
+              :class="openFaqIndex === index ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div v-show="openFaqIndex === index" class="px-6 pb-5">
+            <p class="text-sm leading-relaxed text-gray-600">{{ faq.a }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 故障排查 -->
+    <section id="troubleshoot" class="bg-mist py-20">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="text-center">
+          <p class="text-xs uppercase tracking-[0.3em] text-gray-400">故障排查</p>
+          <h2 class="mt-3 font-display text-3xl font-semibold">快速解决常见设备问题</h2>
+          <p class="mx-auto mt-3 max-w-lg text-sm text-gray-600">按照以下步骤排查，大部分问题都能快速解决。如仍有疑问请联系我们的支持团队。</p>
+        </div>
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          <div v-for="(guide, index) in troubleshootGuides" :key="index"
+            class="group rounded-3xl bg-white p-6 shadow-soft transition hover:-translate-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-3xl">{{ guide.icon }}</span>
+              <span class="rounded-full bg-mist px-3 py-1 text-xs font-semibold text-ocean">{{ guide.tag }}</span>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold">{{ guide.title }}</h3>
+            <ul class="mt-3 space-y-2">
+              <li v-for="(step, si) in guide.steps" :key="si" class="flex items-start gap-2 text-sm text-gray-600">
+                <span
+                  class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-mint/30 text-xs font-semibold text-ocean">
+                  {{ si + 1 }}
+                </span>
+                <span>{{ step }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使用指南 -->
+    <section class="mx-auto max-w-6xl px-6 py-20">
+      <div class="text-center">
+        <p class="text-xs uppercase tracking-[0.3em] text-gray-400">使用指南</p>
+        <h2 class="mt-3 font-display text-3xl font-semibold">快速上手你的 uSensing 戒指</h2>
+      </div>
+      <div class="mt-12 grid gap-6 md:grid-cols-4">
+        <div v-for="(step, index) in quickStartSteps" :key="index" class="text-center">
+          <div
+            class="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-mint/40 to-blush/40 text-2xl shadow-soft">
+            {{ step.icon }}
+          </div>
+          <div class="mt-2 text-xs font-semibold text-ocean">步骤 {{ index + 1 }}</div>
+          <h3 class="mt-2 text-sm font-semibold">{{ step.title }}</h3>
+          <p class="mt-2 text-xs text-gray-500">{{ step.desc }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 联系我们 -->
+    <section id="contact" class="relative overflow-hidden bg-ink py-20 text-white">
+      <div class="absolute inset-0 opacity-20"
+        style="background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 32px 32px;">
+      </div>
+      <div class="relative mx-auto max-w-6xl px-6">
+        <div class="text-center">
+          <p class="text-xs uppercase tracking-[0.3em] text-mint/70">联系我们</p>
+          <h2 class="mt-4 font-display text-3xl font-semibold">还有其他问题？随时联系支持团队</h2>
+          <p class="mx-auto mt-3 max-w-lg text-sm text-gray-300">
+            我们的客服团队通常会在 24 小时内回复您的邮件，工作时间内的在线咨询将实时响应。
+          </p>
+        </div>
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur">
+            <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-mint/20 text-2xl">📧</div>
+            <h3 class="mt-4 text-lg font-semibold">邮件支持</h3>
+            <p class="mt-2 text-sm text-gray-300">发送问题到我们的邮箱，我们会尽快回复</p>
+            <a href="mailto:support@usensing.com"
+              class="mt-4 inline-block rounded-full bg-white/10 px-5 py-2 text-sm font-medium text-white hover:bg-white/20 transition">
+              support@usensing.com
+            </a>
+          </div>
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur">
+            <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-mint/20 text-2xl">💬</div>
+            <h3 class="mt-4 text-lg font-semibold">在线客服</h3>
+            <p class="mt-2 text-sm text-gray-300">工作日 9:00 – 18:00 在线即时沟通</p>
+            <button
+              class="mt-4 inline-block rounded-full bg-mint/30 px-5 py-2 text-sm font-medium text-white hover:bg-mint/40 transition">
+              打开在线聊天
+            </button>
+          </div>
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur">
+            <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-mint/20 text-2xl">📱</div>
+            <h3 class="mt-4 text-lg font-semibold">App 内反馈</h3>
+            <p class="mt-2 text-sm text-gray-300">在 App「设置 → 意见反馈」中提交</p>
+            <button
+              class="mt-4 inline-block rounded-full bg-white/10 px-5 py-2 text-sm font-medium text-white hover:bg-white/20 transition">
+              下载 App
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 反馈表单 -->
+    <section class="mx-auto max-w-4xl px-6 py-20">
+      <div class="rounded-[36px] bg-white p-8 shadow-soft md:p-12">
+        <div class="text-center">
+          <h2 class="font-display text-2xl font-semibold">提交问题反馈</h2>
+          <p class="mt-2 text-sm text-gray-500">详细描述您的问题，我们的技术团队会尽快为您处理。</p>
+        </div>
+        <form @submit.prevent="submitFeedback" class="mt-8 space-y-5">
+          <div class="grid gap-5 md:grid-cols-2">
+            <div>
+              <label class="text-xs font-semibold text-gray-500">您的称呼</label>
+              <input v-model="form.name" type="text" placeholder="请输入称呼"
+                class="mt-1 w-full rounded-2xl border border-gray-200 bg-mist px-4 py-3 text-sm outline-none focus:border-ocean focus:ring-1 focus:ring-ocean/30" />
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-gray-500">联系邮箱</label>
+              <input v-model="form.email" type="email" placeholder="请输入邮箱"
+                class="mt-1 w-full rounded-2xl border border-gray-200 bg-mist px-4 py-3 text-sm outline-none focus:border-ocean focus:ring-1 focus:ring-ocean/30" />
+            </div>
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-gray-500">问题类型</label>
+            <select v-model="form.type"
+              class="mt-1 w-full rounded-2xl border border-gray-200 bg-mist px-4 py-3 text-sm outline-none focus:border-ocean focus:ring-1 focus:ring-ocean/30">
+              <option value="">请选择问题类型</option>
+              <option value="device">设备连接问题</option>
+              <option value="data">数据异常</option>
+              <option value="account">账号相关</option>
+              <option value="subscription">订阅与付费</option>
+              <option value="suggestion">功能建议</option>
+              <option value="other">其他</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-gray-500">问题描述</label>
+            <textarea v-model="form.message" rows="4" placeholder="请详细描述您遇到的问题…"
+              class="mt-1 w-full rounded-2xl border border-gray-200 bg-mist px-4 py-3 text-sm outline-none focus:border-ocean focus:ring-1 focus:ring-ocean/30 resize-none"></textarea>
+          </div>
+          <div class="text-center">
+            <button type="submit"
+              class="rounded-full bg-ink px-8 py-3 text-sm font-semibold text-white shadow-soft hover:opacity-90 transition">
+              {{ formSubmitted ? '已提交，感谢反馈！' : '提交反馈' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 其他链接 -->
+    <section class="mx-auto max-w-6xl px-6 pb-20">
+      <div class="grid gap-6 md:grid-cols-3">
+        <a href="policy.html"
+          class="group rounded-3xl bg-white p-6 shadow-soft transition hover:-translate-y-1">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">🔒</span>
+            <div>
+              <p class="text-sm font-semibold group-hover:text-ocean transition">隐私政策</p>
+              <p class="mt-1 text-xs text-gray-500">了解我们如何保护您的个人信息</p>
+            </div>
+          </div>
+        </a>
+        <a href="index.html#pricing"
+          class="group rounded-3xl bg-white p-6 shadow-soft transition hover:-translate-y-1">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">💳</span>
+            <div>
+              <p class="text-sm font-semibold group-hover:text-ocean transition">服务方案</p>
+              <p class="mt-1 text-xs text-gray-500">查看订阅方案与定价详情</p>
+            </div>
+          </div>
+        </a>
+        <a href="index.html"
+          class="group rounded-3xl bg-white p-6 shadow-soft transition hover:-translate-y-1">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">🏠</span>
+            <div>
+              <p class="text-sm font-semibold group-hover:text-ocean transition">返回官网</p>
+              <p class="mt-1 text-xs text-gray-500">了解更多关于联感 uSensing</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-ink pb-10 pt-12 text-gray-400">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p class="font-display text-lg font-semibold text-white">联感 uSensing</p>
+            <p class="mt-2 text-xs">智能检测戒指 · 健康数据平台</p>
+          </div>
+          <div class="flex flex-wrap gap-6 text-xs">
+            <a href="index.html" class="hover:text-white">官网首页</a>
+            <a href="index.html#features" class="hover:text-white">产品能力</a>
+            <a href="policy.html" class="hover:text-white">隐私政策</a>
+            <a href="mailto:support@usensing.com" class="hover:text-white">support@usensing.com</a>
+          </div>
+        </div>
+        <div class="mt-8 text-xs">© 2026 uSensing. All rights reserved.</div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          searchQuery: "",
+          activeCategory: "all",
+          openFaqIndex: null,
+          formSubmitted: false,
+          form: {
+            name: "",
+            email: "",
+            type: "",
+            message: "",
+          },
+          categories: [
+            { key: "all", icon: "📋", label: "全部" },
+            { key: "device", icon: "💍", label: "设备连接" },
+            { key: "data", icon: "📊", label: "数据监测" },
+            { key: "account", icon: "👤", label: "账号管理" },
+            { key: "subscription", icon: "💳", label: "订阅付费" },
+            { key: "app", icon: "📱", label: "App 使用" },
+          ],
+          faqs: [
+            {
+              cat: "设备连接",
+              catKey: "device",
+              q: "如何首次配对 uSensing 智能戒指？",
+              a: "打开 App 并确保蓝牙已开启，进入「设备」页面点击「添加新设备」，将戒指靠近手机，系统会自动搜索并提示配对。配对完成后会自动同步数据。",
+            },
+            {
+              cat: "设备连接",
+              catKey: "device",
+              q: "戒指无法连接蓝牙怎么办？",
+              a: "请先确认戒指电量充足（放入充电盒充电 5 分钟后再试），然后在手机蓝牙设置中忘记该设备后重新配对。如果问题持续，请尝试重启手机或更新 App 到最新版本。",
+            },
+            {
+              cat: "设备连接",
+              catKey: "device",
+              q: "戒指的蓝牙连接距离是多少？",
+              a: "uSensing 戒指采用低功耗蓝牙 5.0，在无遮挡情况下有效连接距离约为 10 米。日常佩戴时手机放在身边即可保持稳定连接。",
+            },
+            {
+              cat: "数据监测",
+              catKey: "data",
+              q: "血压数据与医院测量结果有差异是否正常？",
+              a: "uSensing 提供的是连续趋势性血压监测，与袖带式血压计的单次测量原理不同。我们建议将戒指数据作为趋势参考，重大健康决策请以医疗级设备为准。首次使用建议与袖带血压计同步校准。",
+            },
+            {
+              cat: "数据监测",
+              catKey: "data",
+              q: "睡眠数据看起来不准确怎么办？",
+              a: "确保佩戴戒指睡觉时松紧适中（不应过紧或过松），传感器朝向手指内侧。开启 App 中的「自动睡眠检测」功能，连续佩戴 3-5 天后，算法会适应您的个人基线，准确性会逐步提升。",
+            },
+            {
+              cat: "数据监测",
+              catKey: "data",
+              q: "数据多久同步一次？",
+              a: "在蓝牙连接状态下，健康数据每 5 分钟自动同步至 App。如果断开连接，戒指可本地存储最多 7 天的数据，重新连接后会自动回传。",
+            },
+            {
+              cat: "账号管理",
+              catKey: "account",
+              q: "如何注销账号？",
+              a: "进入 App「设置 → 账号与安全 → 注销账号」，按照提示完成身份验证后提交申请。我们将在 7 个工作日内完成处理，注销后所有数据将被永久删除且无法恢复。",
+            },
+            {
+              cat: "账号管理",
+              catKey: "account",
+              q: "一个账号可以绑定多个戒指吗？",
+              a: "目前一个账号仅支持绑定一个戒指设备。如需更换设备，请先在 App 中解绑当前设备后再绑定新设备。",
+            },
+            {
+              cat: "订阅付费",
+              catKey: "subscription",
+              q: "订阅方案如何付费？可以退款吗？",
+              a: "订阅通过 App 内支付完成，支持微信支付与支付宝。订阅后 7 天内如未使用高级功能可申请全额退款，超过 7 天将按使用天数折算。详情请查看服务条款。",
+            },
+            {
+              cat: "订阅付费",
+              catKey: "subscription",
+              q: "免费版和付费版有什么区别？",
+              a: "免费版支持基础的心率、血氧和步数监测。付费版解锁血压趋势、睡眠深度分析、AI 健康简报、风险预警和家庭共享面板等高级功能。",
+            },
+            {
+              cat: "App 使用",
+              catKey: "app",
+              q: "App 支持哪些手机系统？",
+              a: "uSensing App 支持 iOS 15.0 及以上和 Android 10.0 及以上系统。建议保持系统和 App 都更新到最新版本以获得最佳体验。",
+            },
+            {
+              cat: "App 使用",
+              catKey: "app",
+              q: "如何导出健康报告？",
+              a: "进入 App「健康报告」页面，选择需要导出的时间范围，点击右上角「导出」按钮，可生成 PDF 格式的报告并分享给医生或家人。",
+            },
+          ],
+          troubleshootGuides: [
+            {
+              icon: "🔋",
+              tag: "电量",
+              title: "戒指无法充电",
+              steps: [
+                "清洁戒指内侧与充电盒的金属触点",
+                "确认充电盒电量充足（指示灯亮起）",
+                "调整戒指放入角度确保触点对准",
+                "如仍无法充电，请联系客服更换充电盒",
+              ],
+            },
+            {
+              icon: "📶",
+              tag: "连接",
+              title: "频繁断连或无法同步",
+              steps: [
+                "确认手机蓝牙已开启且 App 有蓝牙权限",
+                "关闭并重新打开手机蓝牙",
+                "在 App 中点击「重新连接」按钮",
+                "如多次失败，卸载并重装 App 后重新配对",
+              ],
+            },
+            {
+              icon: "📉",
+              tag: "数据",
+              title: "数据缺失或异常",
+              steps: [
+                "确保戒指佩戴位置正确（传感器贴合皮肤）",
+                "检查戒指是否松动，建议选择合适尺寸",
+                "在 App「设备」中执行一次手动同步",
+                "连续佩戴 3 天让算法完成个体基线学习",
+              ],
+            },
+          ],
+          quickStartSteps: [
+            {
+              icon: "📦",
+              title: "开箱激活",
+              desc: "取出戒指放入充电盒完成首次充电，约 45 分钟充满。",
+            },
+            {
+              icon: "📲",
+              title: "下载 App",
+              desc: "在应用商店搜索「联感」或「uSensing」下载并注册账号。",
+            },
+            {
+              icon: "💍",
+              title: "配对连接",
+              desc: "打开蓝牙，在 App 中添加设备，按提示完成配对。",
+            },
+            {
+              icon: "❤️",
+              title: "开始监测",
+              desc: "佩戴戒指，数据将自动采集并同步到 App 中。",
+            },
+          ],
+        };
+      },
+      computed: {
+        filteredFaqs() {
+          let result = this.faqs;
+          if (this.activeCategory !== "all") {
+            result = result.filter((f) => f.catKey === this.activeCategory);
+          }
+          if (this.searchQuery.trim()) {
+            const query = this.searchQuery.trim().toLowerCase();
+            result = result.filter(
+              (f) =>
+                f.q.toLowerCase().includes(query) ||
+                f.a.toLowerCase().includes(query)
+            );
+          }
+          return result;
+        },
+      },
+      methods: {
+        toggleFaq(index) {
+          this.openFaqIndex = this.openFaqIndex === index ? null : index;
+        },
+        submitFeedback() {
+          if (!this.form.name || !this.form.email || !this.form.message) {
+            alert("请填写必要的信息");
+            return;
+          }
+          this.formSubmitted = true;
+          setTimeout(() => {
+            this.formSubmitted = false;
+            this.form = { name: "", email: "", type: "", message: "" };
+          }, 3000);
+        },
+      },
+    }).mount("#app");
+  </script>
+</body>
+
+</html>
