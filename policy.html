@@ -36,12 +36,78 @@
           <li>2. 设备与使用信息：设备型号、操作系统、IP 地址、日志信息、APP 版本与使用行为。</li>
           <li>3. 健康与生理数据：血压趋势、心率/心电、血氧、睡眠、体温、运动与压力指标等。</li>
           <li>4. 位置与运动数据（可选）：用于运动轨迹、场景分析与设备定位。</li>
-          <li>5. 客服与反馈信息：您与我们联系时提交的内容、截图或日志。</li>
+          <li>5. 语音数据（可选）：用于 AI 健康顾问语音输入功能的语音识别处理。</li>
+          <li>6. 客服与反馈信息：您与我们联系时提交的内容、截图或日志。</li>
         </ul>
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold">二、我们如何使用信息</h2>
+        <h2 class="text-xl font-semibold">二、应用权限说明</h2>
+        <p class="mt-3 text-sm text-gray-600">
+          为了实现核心功能，πRing / 联感 uSensing App 需要在您的设备上请求以下系统权限。我们仅在必要时请求，且不会超范围使用。
+        </p>
+
+        <div class="mt-4 overflow-hidden rounded-2xl border border-gray-100">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-50 text-left text-xs font-semibold text-gray-500">
+                <th class="px-4 py-3">权限类别</th>
+                <th class="px-4 py-3">用途说明</th>
+                <th class="px-4 py-3">对应系统声明</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-600 divide-y divide-gray-100">
+              <tr>
+                <td class="px-4 py-3 font-semibold text-gray-700">蓝牙</td>
+                <td class="px-4 py-3">与智能检测戒指建立并维持蓝牙低功耗（BLE）连接，实时传输心率、血氧、血压趋势、睡眠等健康监测数据，以及执行戒指固件更新。App 需要后台蓝牙权限以保持持续的健康监测连接。</td>
+                <td class="px-4 py-3">
+                  <p class="text-xs"><span class="font-semibold">iOS：</span>NSBluetoothAlwaysUsageDescription、NSBluetoothPeripheralUsageDescription、UIBackgroundModes (bluetooth-central)</p>
+                  <p class="mt-1 text-xs"><span class="font-semibold">Android：</span>BLUETOOTH、BLUETOOTH_ADMIN、BLUETOOTH_SCAN、BLUETOOTH_CONNECT、BLUETOOTH_ADVERTISE</p>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-semibold text-gray-700">位置</td>
+                <td class="px-4 py-3">Android 系统要求授予位置权限才能扫描和连接蓝牙低功耗（BLE）设备。iOS 同理需要位置授权以扫描 BLE 外设。<strong>我们不会收集、存储或上传您的地理位置数据。</strong></td>
+                <td class="px-4 py-3">
+                  <p class="text-xs"><span class="font-semibold">iOS：</span>NSLocationWhenInUseUsageDescription、NSLocationAlwaysAndWhenInUseUsageDescription</p>
+                  <p class="mt-1 text-xs"><span class="font-semibold">Android：</span>ACCESS_FINE_LOCATION、ACCESS_COARSE_LOCATION</p>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-semibold text-gray-700">麦克风</td>
+                <td class="px-4 py-3">用于 AI 健康顾问的语音输入功能。您可以通过语音向健康顾问提问，代替手动输入文字。此权限仅在您主动发起语音交互时激活。</td>
+                <td class="px-4 py-3">
+                  <p class="text-xs"><span class="font-semibold">iOS：</span>NSMicrophoneUsageDescription</p>
+                  <p class="mt-1 text-xs"><span class="font-semibold">Android：</span>RECORD_AUDIO</p>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-semibold text-gray-700">语音识别</td>
+                <td class="px-4 py-3">将您向 AI 健康顾问发出的语音内容转换为文字，以便系统理解并回答您的健康问题。</td>
+                <td class="px-4 py-3">
+                  <p class="text-xs"><span class="font-semibold">iOS：</span>NSSpeechRecognitionUsageDescription</p>
+                  <p class="mt-1 text-xs"><span class="font-semibold">Android：</span>通过 RECORD_AUDIO 结合语音识别服务实现</p>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-semibold text-gray-700">网络</td>
+                <td class="px-4 py-3">用于将健康数据同步至云端、获取 AI 健康建议、下载固件更新及与服务器通信。</td>
+                <td class="px-4 py-3">
+                  <p class="text-xs"><span class="font-semibold">Android：</span>INTERNET</p>
+                  <p class="mt-1 text-xs"><span class="font-semibold">iOS：</span>默认允许，无需额外声明</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mt-4 text-xs text-gray-500">
+          注：上述权限均在首次使用对应功能时弹窗请求授权。您可以随时在系统设置中关闭任何权限，但关闭蓝牙权限将导致无法连接智能戒指，关闭麦克风权限将无法使用语音输入功能。
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-semibold">三、我们如何使用信息</h2>
         <ul class="mt-3 space-y-2 text-sm text-gray-600">
           <li>1. 提供健康监测与趋势分析服务，生成可视化报告与提示。</li>
           <li>2. 改进算法模型、提升数据准确性与产品体验。</li>
@@ -51,7 +117,7 @@
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold">三、我们如何共享、转让与公开披露信息</h2>
+        <h2 class="text-xl font-semibold">四、我们如何共享、转让与公开披露信息</h2>
         <ul class="mt-3 space-y-2 text-sm text-gray-600">
           <li>1. 未经您同意，我们不会向第三方共享您的个人信息，法律法规另有规定的除外。</li>
           <li>2. 为实现核心功能，我们可能与必要的服务提供商共享最小化信息（如云服务、消息推送）。</li>
@@ -60,7 +126,7 @@
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold">四、我们如何保护信息安全</h2>
+        <h2 class="text-xl font-semibold">五、我们如何保护信息安全</h2>
         <p class="mt-3 text-sm text-gray-600">
           我们采用加密传输、访问控制、日志审计与去标识化等措施保护信息安全。尽管如此，
           互联网环境并非绝对安全，请您妥善保管账号信息。
@@ -68,7 +134,7 @@
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold">五、您的权利</h2>
+        <h2 class="text-xl font-semibold">六、您的权利</h2>
         <ul class="mt-3 space-y-2 text-sm text-gray-600">
           <li>1. 访问与更正：您可在 App 内查看并修改个人资料。</li>
           <li>2. 删除：在符合条件的情况下可申请删除个人信息。</li>
@@ -78,28 +144,28 @@
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold">六、儿童与未成年人保护</h2>
+        <h2 class="text-xl font-semibold">七、儿童与未成年人保护</h2>
         <p class="mt-3 text-sm text-gray-600">
           我们主要面向成年人提供服务。如您未满法定年龄，请在监护人同意与指导下使用本服务。
         </p>
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold">七、信息存储与跨境传输</h2>
+        <h2 class="text-xl font-semibold">八、信息存储与跨境传输</h2>
         <p class="mt-3 text-sm text-gray-600">
           我们在法律法规允许的范围内存储您的信息。若涉及跨境传输，将依法获得授权并采取必要安全措施。
         </p>
       </div>
 
       <div>
-        <h2 class="text-xl font-semibold">八、本政策的更新</h2>
+        <h2 class="text-xl font-semibold">九、本政策的更新</h2>
         <p class="mt-3 text-sm text-gray-600">
           我们可能适时更新本政策。重大变更将通过 App 通知或官网公告提示您。
         </p>
       </div>
 
       <div class="rounded-2xl bg-gray-50 px-5 py-4">
-        <h2 class="text-lg font-semibold">九、联系我们</h2>
+        <h2 class="text-lg font-semibold">十、联系我们</h2>
         <p class="mt-2 text-sm text-gray-600">
           如您对本政策或个人信息保护有任何疑问，请通过以下方式联系我们：
         </p>
